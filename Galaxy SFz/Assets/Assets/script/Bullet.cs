@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float bulletVelocity = 5f;
-    public GameObject bullet;
+    public GameObject player;
     public GameObject bullet1;
 // Use this for initialization
  void Start () {
@@ -16,16 +16,32 @@ public class Bullet : MonoBehaviour
  void Update () {
      if (Input.GetButtonDown("Fire1"))
      {
-         Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-         Vector2 direction = (Vector2)((worldMousePos - transform.position));
-         direction.Normalize();
+         //Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+         //Vector2 direction = (Vector2)((worldMousePos - player.transform.position));
+         //Vector2 direction = new Vector2(90.0f, 0.0f);
+         //Vector2 direction = worldMousePos;
+
+         //Debug.Log("Maus:"+worldMousePos.ToString());
+         //Debug.Log("PlayerX:"+player.transform.position.x.ToString());
+         //Debug.Log("PlayerY:"+player.transform.position.y.ToString());
+
+        Vector3 shootDirection;
+        shootDirection = Input.mousePosition;
+        shootDirection.z = 0.0f;
+        shootDirection = Camera.main.ScreenToWorldPoint(shootDirection);
+        shootDirection = shootDirection-player.transform.position;
+
+
+
+         //shootDirection.Normalize();
          // Creates the bullet locally
          GameObject bullet = (GameObject)Instantiate(
                                  bullet1,
-                                 transform.position + (Vector3)(direction * 0.5f),
+                                 //transform.position + (Vector3)(shootDirection * 0.5f),
+                                 transform.position,
                                  Quaternion.identity);
          // Adds velocity to the bullet
-         bullet.GetComponent<Rigidbody2D>().velocity = direction * bulletVelocity;
+         bullet.GetComponent<Rigidbody2D>().velocity = shootDirection * bulletVelocity;
          StartCoroutine(SelfDestruct(bullet));    
      }
  }
